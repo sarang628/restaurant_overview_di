@@ -30,8 +30,8 @@ fun RestaurantDetail.toRestaurantImages(): List<RestaurantImage> {
 
 fun RestaurantDetail.toReviewSummaryData(): ReviewSummaryData {
     return ReviewSummaryData(
-        rating = this.restaurant.rating,
-        totalReviewer = this.restaurant.reviewCount,
+        rating = this.restaurant.rating ?: 0f,
+        totalReviewer = this.restaurant.reviewCount?: 0,
         score5 = 5.0f,
         score4 = 4.0f,
         score3 = 3.0f,
@@ -58,7 +58,7 @@ fun FeedApiModel.toFeedData(): Feed {
         reviewId = this.reviewId,
         userId = this.user.userId,
         name = this.user.userName,
-        restaurantName = this.restaurant.restaurantName,
+        restaurantName = this.restaurant.restaurantName ?: "",
         rating = this.rating,
         profilePictureUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL + this.user.profilePicUrl,
         likeAmount = this.like_amount,
@@ -75,6 +75,6 @@ fun FeedApiModel.toFeedData(): Feed {
         visibleComment = false,
         contents = this.contents,
         reviewImages = this.pictures.map { BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url },
-        restaurantId = this.restaurant.restaurantId
+        restaurantId = this.restaurant.restaurantId ?: -1
     )
 }

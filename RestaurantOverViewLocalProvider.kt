@@ -7,6 +7,7 @@ import com.sarang.torang.compose.type.RestaurantOverViewImageLoader
 import com.sarang.torang.compose.type.RestaurantOverviewRestaurantInfo
 import com.sarang.torang.di.image.provideTorangAsyncImage
 import com.sarang.torang.di.restaurant_info.RestaurantInfoWithPermission
+import com.sarang.torang.di.restaurant_info.RestaurantInfoWithPermissionWithLocation
 import com.sryang.library.compose.workflow.BestPracticeViewModel
 
 val restaurantOverViewImageLoader: RestaurantOverViewImageLoader = { modifier, url, width, height, scale ->
@@ -16,7 +17,7 @@ val restaurantOverViewImageLoader: RestaurantOverViewImageLoader = { modifier, u
 
 val restaurantOverViewRestaurantInfo: RestaurantOverviewRestaurantInfo = {
     CompositionLocalProvider(LocalRestaurantInfoImageLoader provides restaurantInfoImageLoader){
-        RestaurantInfoWithPermission(restaurantId = it, viewModel = BestPracticeViewModel())
+        RestaurantInfoWithPermissionWithLocation(restaurantId = it)
     }
 }
 

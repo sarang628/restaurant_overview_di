@@ -1,12 +1,12 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import com.sarang.library.data.Feed
+import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
 import com.sarang.library.data.ReviewRowData
 import com.sarang.library.data.ReviewSummaryData
 import com.sarang.torang.BuildConfig
-import com.sarang.torang.data.RestaurantDetail
+import com.sarang.torang.data.FeedImageInRestaurant
 import com.sarang.torang.data.remote.response.FeedApiModel
 import com.sarang.torang.data.remote.response.RestaurantDetailApiModel
 
@@ -54,8 +54,8 @@ fun RestaurantDetailApiModel.toReviewRowData(): List<ReviewRowData> {
     }
 }
 
-fun FeedApiModel.toFeedData(): Feed {
-    return Feed(
+fun FeedApiModel.toFeedData(): FeedInRestaurant {
+    return FeedInRestaurant(
         reviewId = this.reviewId,
         userId = this.user.userId,
         name = this.user.userName,
@@ -75,7 +75,7 @@ fun FeedApiModel.toFeedData(): Feed {
         visibleLike = false,
         visibleComment = false,
         contents = this.contents,
-        reviewImages = this.pictures.map { BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url },
+        reviewImages = this.pictures.map { FeedImageInRestaurant(BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url, it.width, it.height) },
         restaurantId = this.restaurant.restaurantId ?: -1
     )
 }

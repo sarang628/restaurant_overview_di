@@ -1,6 +1,6 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import com.sarang.library.data.Feed
+import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
 import com.sarang.library.usecase.FetchReviewsUseCase
@@ -21,7 +21,7 @@ class RestaurantOverviewServiceModule {
     @Provides
     fun providesFetchReviewsUseCase(apiReview: ApiReview): FetchReviewsUseCase {
         return object : FetchReviewsUseCase {
-            override suspend fun invoke(restaurantId: Int): List<Feed> {
+            override suspend fun invoke(restaurantId: Int): List<FeedInRestaurant> {
                 try {
                     return apiReview.getReviews(restaurantId).map { it.toFeedData() }
                 } catch (e: HttpException) {

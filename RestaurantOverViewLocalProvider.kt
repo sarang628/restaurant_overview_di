@@ -17,7 +17,7 @@ val restaurantOverViewImageLoader: RestaurantOverViewImageLoader = { modifier, u
 fun restaurantOverViewRestaurantInfo(rootNavController: RootNavController): RestaurantOverviewRestaurantInfo = {
     CompositionLocalProvider(LocalRestaurantInfoImageLoader provides restaurantInfoImageLoader){
         RestaurantInfoWithPermissionWithLocation(restaurantId = it,
-            onLocation = { rootNavController.map() })
+            onLocation = { rootNavController.map(it) })
     }
 }
 

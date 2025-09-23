@@ -1,12 +1,27 @@
 package com.sarang.torang.di.restaurant_overview_di
 
+import com.sarang.torang.compose.feed.type.FeedTypeData
+import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
 import com.sarang.torang.data.ReviewImage
 import com.sarang.torang.data.feed.FeedImage
 import com.sarang.torang.di.feed_di.provideFeed
 
-val CustomRestaurantFeedType: RestaurantFeedType = { a, b, c, d, e, f, g -> provideFeed().invoke(a.toFeed, b, c, d, e, f, g) }
+val CustomRestaurantFeedType: RestaurantFeedType = {
+   feed, onLike, onFavorite, isLogin, onVideoClick, imageHeight, pageScrollAble ->
+    provideFeed().invoke(
+        FeedTypeData(
+            feed = feed.toFeed,
+            onLike = onLike,
+            onFavorite = onFavorite,
+            isLogin = isLogin,
+            onVideoClick = onVideoClick,
+            imageHeight = imageHeight,
+            pageScrollable = pageScrollAble
+        )
+    )
+}
 
 val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {
     return com.sarang.torang.data.feed.Feed(

@@ -1,6 +1,7 @@
 package com.sarang.torang.di.restaurant_overview_di
 
 import com.sarang.torang.compose.feed.FeedItem
+import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.feed.type.feedType
 import com.sarang.torang.data.FeedInRestaurant
@@ -13,7 +14,10 @@ import com.sarang.torang.di.feed_di.toReview
 val CustomRestaurantFeedType: RestaurantFeedType = {
     FeedItem(
         uiState = it.feed.toFeed.toReview(it.isLogin),
-        pageScrollAble = it.pageScrollAble
+        pageScrollAble = it.pageScrollAble,
+        feedItemClickEvents = FeedItemClickEvents(
+            onLike = { it.onLike(it.feed.reviewId) }
+        )
     )
 }
 

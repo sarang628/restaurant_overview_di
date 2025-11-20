@@ -3,9 +3,9 @@ package com.sarang.torang.di.restaurant_overview_di
 import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
-import com.sarang.library.usecase.FetchReviewsUseCase
-import com.sarang.library.usecase.GetMenuUseCase
-import com.sarang.library.usecase.GetRestaurantGalleryUseCase
+import com.sarang.torang.usecase.restaurantoverview.FetchReviewsUseCase
+import com.sarang.torang.usecase.restaurantoverview.GetMenuUseCase
+import com.sarang.torang.usecase.restaurantoverview.GetRestaurantGalleryUseCase
 import com.sarang.torang.api.ApiRestaurant
 import com.sarang.torang.api.ApiReview
 import com.sarang.torang.api.handle

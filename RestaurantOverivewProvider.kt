@@ -1,5 +1,7 @@
 package com.sarang.torang.di.restaurant_overview_di
 
+import android.Manifest
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,14 +21,17 @@ import com.sarang.torang.compose.type.LocalRestaurantOverviewRestaurantInfo
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 
+@RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProvideRestaurantOverivew(restaurantId : Int){
+fun ProvideRestaurantOverview(restaurantId : Int){
     val viewModel : RestaurantInfoViewModel = hiltViewModel()
     CompositionLocalProvider(
         LocalRestaurantOverViewImageLoader    provides restaurantOverViewImageLoader,
         LocalRestaurantOverviewRestaurantInfo provides restaurantOverViewRestaurantInfo(
-            rootNavController = RootNavController(), viewModel = viewModel),
+            rootNavController = RootNavController(),
+            viewModel = viewModel
+        ),
         LocalRestaurantFeed                   provides CustomRestaurantFeedType,
         LocalExpandableTextType               provides CustomExpandableTextType,
         LocalFeedImageLoader                  provides CustomFeedImageLoader(),

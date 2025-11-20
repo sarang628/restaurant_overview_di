@@ -16,7 +16,8 @@ val CustomRestaurantFeedType: RestaurantFeedType = {
         uiState = it.feed.toFeed.toReview(it.isLogin),
         pageScrollAble = it.pageScrollAble,
         feedItemClickEvents = FeedItemClickEvents(
-            onLike = { it.onLike(it.feed.reviewId) }
+            onLike = { it.onLike(it.feed.reviewId) },
+            onFavorite = { it.onFavorite(it.feed.reviewId) }
         )
     )
 }

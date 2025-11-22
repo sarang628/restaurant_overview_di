@@ -54,7 +54,7 @@ fun RestaurantDetailApiModel.toReviewRowData(): List<ReviewRowData> {
     }
 }
 
-fun FeedApiModel.toFeedData(): FeedInRestaurant {
+fun FeedApiModel.toFeedInRestaurant(): FeedInRestaurant {
     return FeedInRestaurant(
         reviewId = this.reviewId,
         userId = this.user.userId,

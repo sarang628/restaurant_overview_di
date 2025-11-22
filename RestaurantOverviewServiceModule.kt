@@ -10,11 +10,16 @@ import com.sarang.torang.api.ApiRestaurant
 import com.sarang.torang.api.ApiReview
 import com.sarang.torang.api.ApiReviewV1
 import com.sarang.torang.api.handle
+import com.sarang.torang.core.database.model.feed.ReviewAndImageEntity
+import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.session.SessionService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
 @InstallIn(SingletonComponent::class)
@@ -22,22 +27,61 @@ import retrofit2.HttpException
 class RestaurantOverviewServiceModule {
     @Provides
     fun providesFetchReviewsUseCase(
-        apiReview: ApiReview,
-        apiReviewV1 : ApiReviewV1,
-        sessionService : SessionService
+        apiReview       : ApiReview,
+        apiReviewV1     : ApiReviewV1,
+        sessionService  : SessionService,
+        feedRepository  : FeedRepository
     ): FetchReviewsUseCase {
         return object : FetchReviewsUseCase {
-            override suspend fun invoke(restaurantId: Int): List<FeedInRestaurant> {
+            override suspend fun invoke(restaurantId: Int): Flow<List<FeedInRestaurant>> {
+                val result : MutableStateFlow<List<FeedInRestaurant>> = MutableStateFlow(listOf())
                 try {
-                    return apiReviewV1.getReviewsByRestaurantId(
-                        auth = sessionService.getToken() ?: "",
-                        restaurantId = restaurantId
-                    ).map { it.toFeedData() }
+
+                    result.emit(
+                        apiReviewV1.getReviewsByRestaurantId(
+                            auth = sessionService.getToken() ?: "",
+                            restaurantId = restaurantId
+                        ).map { it.toFeedInRestaurant() }
+                    )
+
                 } catch (e: HttpException) {
                     throw Exception(e.handle())
                 }
+
+
+                return result
+                /*return feedRepository.restaurantFeedsFlow(restaurantId).map {
+                    it.map {
+                        it.toFeedInRestaurant()
+                    }
+                }*/
             }
         }
+    }
+
+    fun ReviewAndImageEntity.toFeedInRestaurant() : FeedInRestaurant {
+        return FeedInRestaurant(
+            restaurantId = this.review.restaurantId ?: 0,
+            reviewId = this.review.reviewId,
+            userId = this.review.userId,
+            name = this.review.userName,
+            restaurantName = this.review.restaurantName ?: "",
+            rating = this.review.rating,
+            profilePictureUrl = this.review.profilePicUrl,
+            likeAmount = this.review.likeAmount,
+            commentAmount = this.review.commentAmount,
+            author = "",
+            author1 = "",
+            author2 = "",
+            comment = "",
+            comment1 = "",
+            comment2 = "",
+            isLike = this.like != null,
+            isFavorite = this.favorite != null,
+            visibleLike = review.likeAmount > 0,
+            visibleComment = review.commentAmount > 0,
+            contents = this.review.contents
+        )
     }
 
     @Provides

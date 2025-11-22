@@ -18,7 +18,6 @@ val restaurantOverViewImageLoader: RestaurantOverViewImageLoader = { modifier, u
     provideTorangAsyncImage().invoke(modifier, url, width, height, scale)
 }
 
-@RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
 fun restaurantOverViewRestaurantInfo(rootNavController: RootNavController, viewModel : RestaurantInfoViewModel): RestaurantOverviewRestaurantInfo = {
     CompositionLocalProvider(LocalRestaurantInfoImageLoader provides restaurantInfoImageLoader){
         restaurantInfo(viewModel = viewModel).invoke(

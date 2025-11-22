@@ -21,10 +21,12 @@ import com.sarang.torang.compose.type.LocalRestaurantOverviewRestaurantInfo
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 
-@RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProvideRestaurantOverview(restaurantId : Int){
+fun ProvideRestaurantOverview(
+    restaurantId    : Int,
+    onErrorMessage  : (String) -> Unit = {}
+){
     val viewModel : RestaurantInfoViewModel = hiltViewModel()
     CompositionLocalProvider(
         LocalRestaurantOverViewImageLoader    provides restaurantOverViewImageLoader,
@@ -38,7 +40,12 @@ fun ProvideRestaurantOverview(restaurantId : Int){
         LocalPullToRefresh                    provides CustomRestaurantOverviewPullToRefreshType
     ) {
         Box(Modifier.fillMaxSize()){
-            RestaurantOverViewScreen(restaurantId = restaurantId, onRefresh = {viewModel.refresh(1)}, isRefreshRestaurantInfo = viewModel.isRefresh)
+            RestaurantOverViewScreen(
+                restaurantId            = restaurantId,
+                onRefresh               = {viewModel.refresh(1)},
+                isRefreshRestaurantInfo = viewModel.isRefresh,
+                onErrorMessage          = onErrorMessage
+            )
         }
     }
 }

@@ -8,7 +8,9 @@ import com.sarang.torang.usecase.restaurantoverview.GetMenuUseCase
 import com.sarang.torang.usecase.restaurantoverview.GetRestaurantGalleryUseCase
 import com.sarang.torang.api.ApiRestaurant
 import com.sarang.torang.api.ApiReview
+import com.sarang.torang.api.ApiReviewV1
 import com.sarang.torang.api.handle
+import com.sarang.torang.session.SessionService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +21,18 @@ import retrofit2.HttpException
 @Module
 class RestaurantOverviewServiceModule {
     @Provides
-    fun providesFetchReviewsUseCase(apiReview: ApiReview): FetchReviewsUseCase {
+    fun providesFetchReviewsUseCase(
+        apiReview: ApiReview,
+        apiReviewV1 : ApiReviewV1,
+        sessionService : SessionService
+    ): FetchReviewsUseCase {
         return object : FetchReviewsUseCase {
             override suspend fun invoke(restaurantId: Int): List<FeedInRestaurant> {
                 try {
-                    return apiReview.getReviews(restaurantId).map { it.toFeedData() }
+                    return apiReviewV1.getReviewsByRestaurantId(
+                        auth = sessionService.getToken() ?: "",
+                        restaurantId = restaurantId
+                    ).map { it.toFeedData() }
                 } catch (e: HttpException) {
                     throw Exception(e.handle())
                 }

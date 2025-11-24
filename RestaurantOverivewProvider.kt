@@ -1,7 +1,5 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import android.Manifest
-import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +40,7 @@ fun ProvideRestaurantOverview(
         Box(Modifier.fillMaxSize()){
             RestaurantOverViewScreen(
                 restaurantId            = restaurantId,
-                onRefresh               = {viewModel.refresh(1)},
+                onRefresh               = {viewModel.refresh(restaurantId)},
                 isRefreshRestaurantInfo = viewModel.isRefresh,
                 onErrorMessage          = onErrorMessage
             )

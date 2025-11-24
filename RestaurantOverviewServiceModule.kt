@@ -80,7 +80,8 @@ class RestaurantOverviewServiceModule {
             isFavorite = this.favorite != null,
             visibleLike = review.likeAmount > 0,
             visibleComment = review.commentAmount > 0,
-            contents = this.review.contents
+            contents = this.review.contents,
+            createDate = this.review.createDate
         )
     }
 

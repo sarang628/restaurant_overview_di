@@ -76,6 +76,7 @@ fun FeedApiModel.toFeedInRestaurant(): FeedInRestaurant {
         visibleComment = false,
         contents = this.contents,
         reviewImages = this.pictures.map { FeedImageInRestaurant(BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url, it.width, it.height) },
-        restaurantId = this.restaurant.restaurantId ?: -1
+        restaurantId = this.restaurant.restaurantId ?: -1,
+        createDate = this.create_date
     )
 }

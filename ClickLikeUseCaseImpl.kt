@@ -25,7 +25,7 @@ class ClickLikeUseCaseImpl {
         return object : ClickLikeUseCase {
             override suspend fun invoke(reviewId: Int) {
                 try {
-                    val count = likeDao.hasLike(reviewId)
+                    val count = likeDao.has(reviewId)
                     if (count == 0) {
                         addLikeUseCase.invoke(reviewId)
                     } else {

@@ -3,6 +3,7 @@ package com.sarang.torang.di.restaurant_overview_di
 import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
+import com.sarang.torang.BuildConfig
 import com.sarang.torang.usecase.restaurantoverview.FetchReviewsUseCase
 import com.sarang.torang.usecase.restaurantoverview.GetMenuUseCase
 import com.sarang.torang.usecase.restaurantoverview.GetRestaurantGalleryUseCase
@@ -11,6 +12,9 @@ import com.sarang.torang.api.ApiReview
 import com.sarang.torang.api.ApiReviewV1
 import com.sarang.torang.api.handle
 import com.sarang.torang.core.database.model.feed.ReviewAndImageEntity
+import com.sarang.torang.core.database.model.image.ReviewImageEntity
+import com.sarang.torang.data.FeedImageInRestaurant
+import com.sarang.torang.data.ReviewImage
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.session.SessionService
 import dagger.Module
@@ -27,34 +31,21 @@ import retrofit2.HttpException
 class RestaurantOverviewServiceModule {
     @Provides
     fun providesFetchReviewsUseCase(
-        apiReview       : ApiReview,
-        apiReviewV1     : ApiReviewV1,
-        sessionService  : SessionService,
         feedRepository  : FeedRepository
     ): FetchReviewsUseCase {
         return object : FetchReviewsUseCase {
             override suspend fun invoke(restaurantId: Int): Flow<List<FeedInRestaurant>> {
-                val result : MutableStateFlow<List<FeedInRestaurant>> = MutableStateFlow(listOf())
                 try {
-
-                    result.emit(
-                        apiReviewV1.getReviewsByRestaurantId(
-                            auth = sessionService.getToken() ?: "",
-                            restaurantId = restaurantId
-                        ).map { it.toFeedInRestaurant() }
-                    )
-
+                    feedRepository.findByRestaurantId(restaurantId)
                 } catch (e: HttpException) {
                     throw Exception(e.handle())
                 }
 
-
-                return result
-                /*return feedRepository.restaurantFeedsFlow(restaurantId).map {
+                return feedRepository.restaurantFeedsFlow(restaurantId).map {
                     it.map {
                         it.toFeedInRestaurant()
                     }
-                }*/
+                }
             }
         }
     }
@@ -67,7 +58,7 @@ class RestaurantOverviewServiceModule {
             name = this.review.userName,
             restaurantName = this.review.restaurantName ?: "",
             rating = this.review.rating,
-            profilePictureUrl = this.review.profilePicUrl,
+            profilePictureUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL + this.review.profilePicUrl,
             likeAmount = this.review.likeAmount,
             commentAmount = this.review.commentAmount,
             author = "",
@@ -81,9 +72,16 @@ class RestaurantOverviewServiceModule {
             visibleLike = review.likeAmount > 0,
             visibleComment = review.commentAmount > 0,
             contents = this.review.contents,
-            createDate = this.review.createDate
+            createDate = this.review.createDate,
+            reviewImages = this.images.map { it.reviewImage }
         )
     }
+
+    val ReviewImageEntity.reviewImage : FeedImageInRestaurant get() =  FeedImageInRestaurant(
+        url = BuildConfig.REVIEW_IMAGE_SERVER_URL + this.pictureUrl,
+        width = this.width,
+        height = this.height
+    )
 
     @Provides
     fun providesGetRestaurantGalleryUseCase(

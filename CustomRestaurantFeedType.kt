@@ -2,13 +2,9 @@ package com.sarang.torang.di.restaurant_overview_di
 
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
-import com.sarang.torang.compose.feed.type.FeedTypeData
-import com.sarang.torang.compose.feed.type.feedType
-import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
-import com.sarang.torang.data.ReviewImage
+import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.data.feed.FeedImage
-import com.sarang.torang.di.feed_di.provideFeed
 import com.sarang.torang.di.feed_di.toReview
 
 val CustomRestaurantFeedType: RestaurantFeedType = {
@@ -18,7 +14,8 @@ val CustomRestaurantFeedType: RestaurantFeedType = {
         feedItemClickEvents = FeedItemClickEvents(
             onLike = { it.onLike(it.feed.reviewId) },
             onFavorite = { it.onFavorite(it.feed.reviewId) }
-        )
+        ),
+        onPage = {}
     )
 }
 
@@ -36,7 +33,7 @@ val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {
         isLike = this.isLike,
         isFavorite = this.isFavorite,
         contents = this.contents,
-        createDate =  "",
+        createDate =  this.createDate,
         reviewImages = this.reviewImages.map { FeedImage(it.url, it.height, it.width) }
     )
 }

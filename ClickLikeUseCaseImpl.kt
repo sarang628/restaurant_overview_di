@@ -1,8 +1,6 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import android.util.Log
 import com.sarang.torang.core.database.dao.LikeDao
-import com.sarang.torang.repository.LikeRepository
 import com.sarang.torang.usecase.AddLikeUseCase
 import com.sarang.torang.usecase.DeleteLikeUseCase
 import com.sarang.torang.usecase.restaurantoverview.ClickLikeUseCase
@@ -24,15 +22,11 @@ class ClickLikeUseCaseImpl {
     ): ClickLikeUseCase {
         return object : ClickLikeUseCase {
             override suspend fun invoke(reviewId: Int) {
-                try {
-                    val count = likeDao.has(reviewId)
-                    if (count == 0) {
-                        addLikeUseCase.invoke(reviewId)
-                    } else {
-                        deleteLikeUseCase.invoke(reviewId)
-                    }
-                } catch (e: Exception) {
-                    Log.i(tag, "click like failed reviewId : ${reviewId}. cause: ${e.toString()}")
+                val count = likeDao.has(reviewId)
+                if (count == 0) {
+                    addLikeUseCase.invoke(reviewId)
+                } else {
+                    deleteLikeUseCase.invoke(reviewId)
                 }
             }
         }

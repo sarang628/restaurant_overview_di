@@ -9,6 +9,7 @@ import com.sarang.torang.di.feed_di.toReview
 
 val CustomRestaurantFeedType: RestaurantFeedType = {
     FeedItem(
+        showLog = true,
         uiState = it.feed.toFeed.toReview(it.isLogin),
         pageScrollAble = it.pageScrollAble,
         feedItemClickEvents = FeedItemClickEvents(
@@ -34,6 +35,10 @@ val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {
         isFavorite = this.isFavorite,
         contents = this.contents,
         createDate =  this.createDate,
-        reviewImages = this.reviewImages.map { FeedImage(it.url, it.height, it.width) }
+        reviewImages = this.reviewImages.map { FeedImage(
+            url = it.url,
+            width = it.width,
+            height = it.height)
+        }
     )
 }

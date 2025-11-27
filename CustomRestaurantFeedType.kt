@@ -1,5 +1,6 @@
 package com.sarang.torang.di.restaurant_overview_di
 
+import android.util.Log
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
@@ -7,14 +8,22 @@ import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.data.feed.FeedImage
 import com.sarang.torang.di.feed_di.toReview
 
-val CustomRestaurantFeedType: RestaurantFeedType = {
+private val tag = "__CustomRestaurantFeedType"
+fun customRestaurantFeedType(
+    onComment   : (Int) -> Unit = { Log.w(tag, "onComment callback is not set") },
+    onShare     : (Int) -> Unit = { Log.w(tag, "onShare callback is not set") },
+    onMenu      : (Int) -> Unit = { Log.w(tag, "onMenu callback is not set") },
+): RestaurantFeedType = {
     FeedItem(
         showLog = true,
         uiState = it.feed.toFeed.toReview(it.isLogin),
         pageScrollAble = it.pageScrollAble,
         feedItemClickEvents = FeedItemClickEvents(
             onLike = { it.onLike(it.feed.reviewId) },
-            onFavorite = { it.onFavorite(it.feed.reviewId) }
+            onFavorite = { it.onFavorite(it.feed.reviewId) },
+            onComment = { onComment(it.feed.reviewId) },
+            onShare = { onShare(it.feed.reviewId) },
+            onMenu = { onMenu(it.feed.reviewId)  }
         ),
         onPage = {}
     )

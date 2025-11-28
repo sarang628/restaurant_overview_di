@@ -13,17 +13,17 @@ fun customRestaurantFeedType(
     onComment   : (Int) -> Unit = { Log.w(tag, "onComment callback is not set") },
     onShare     : (Int) -> Unit = { Log.w(tag, "onShare callback is not set") },
     onMenu      : (Int) -> Unit = { Log.w(tag, "onMenu callback is not set") },
-): RestaurantFeedType = {
+): RestaurantFeedType = { feedData ->
     FeedItem(
         showLog = true,
-        uiState = it.feed.toFeed.toReview(it.isLogin),
-        pageScrollAble = it.pageScrollAble,
+        uiState = feedData.feed.toFeed.toReview(feedData.isLogin),
+        pageScrollAble = feedData.pageScrollAble,
         feedItemClickEvents = FeedItemClickEvents(
-            onLike = { it.onLike(it.feed.reviewId) },
-            onFavorite = { it.onFavorite(it.feed.reviewId) },
-            onComment = { onComment(it.feed.reviewId) },
-            onShare = { onShare(it.feed.reviewId) },
-            onMenu = { onMenu(it.feed.reviewId)  }
+            onLike = { feedData.onLike(feedData.feed.reviewId) },
+            onFavorite = { feedData.onFavorite(feedData.feed.reviewId) },
+            onComment = { onComment(feedData.feed.reviewId) },
+            onShare = { onShare(feedData.feed.reviewId) },
+            onMenu = { onMenu(feedData.feed.reviewId)  }
         ),
         onPage = {}
     )

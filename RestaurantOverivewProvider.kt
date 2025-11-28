@@ -29,33 +29,24 @@ fun ProvideRestaurantOverview(
     onErrorMessage  : (String) -> Unit = {}
 ){
     val viewModel : RestaurantInfoViewModel = hiltViewModel()
-    val dialogsViewModel : FeedDialogsViewModel = hiltViewModel()
     CompositionLocalProvider(
         LocalRestaurantOverViewImageLoader    provides restaurantOverViewImageLoader,
         LocalRestaurantOverviewRestaurantInfo provides restaurantOverViewRestaurantInfo(
             rootNavController = RootNavController(),
             viewModel = viewModel
         ),
-        LocalRestaurantFeed                   provides customRestaurantFeedType(
-            onComment = { dialogsViewModel.onComment(it) },
-            onShare = { dialogsViewModel.onShare(it) },
-            onMenu = { dialogsViewModel.onMenu(it) }
-        ),
+        LocalRestaurantFeed                   provides customRestaurantFeedType(),
         LocalExpandableTextType               provides CustomExpandableTextType,
         LocalFeedImageLoader                  provides CustomFeedImageLoader(),
         LocalPullToRefresh                    provides CustomRestaurantOverviewPullToRefreshType
     ) {
         Box(Modifier.fillMaxSize()){
-            ProvideMainDialog(
-                dialogsViewModel = dialogsViewModel
-            ) {
-                RestaurantOverViewScreen(
-                    restaurantId            = restaurantId,
-                    onRefresh               = {viewModel.refresh(restaurantId)},
-                    isRefreshRestaurantInfo = viewModel.isRefresh,
-                    onErrorMessage          = onErrorMessage
-                )
-            }
+            RestaurantOverViewScreen(
+                restaurantId            = restaurantId,
+                onRefresh               = {viewModel.refresh(restaurantId)},
+                isRefreshRestaurantInfo = viewModel.isRefresh,
+                onErrorMessage          = onErrorMessage
+            )
         }
     }
 }

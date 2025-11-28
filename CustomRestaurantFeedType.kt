@@ -23,7 +23,7 @@ fun customRestaurantFeedType(
             onFavorite = { feedData.onFavorite(feedData.feed.reviewId) },
             onComment = { onComment(feedData.feed.reviewId) },
             onShare = { onShare(feedData.feed.reviewId) },
-            onMenu = { onMenu(feedData.feed.reviewId)  }
+            onMenu = { onMenu(feedData.feed.reviewId) }
         ),
         onPage = {}
     )

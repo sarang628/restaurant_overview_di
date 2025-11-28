@@ -3,12 +3,10 @@ package com.sarang.torang.di.restaurant_overview_di
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sarang.torang.FeedDialogsViewModel
 import com.sarang.torang.RestaurantInfoViewModel
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.internal.components.LocalExpandableTextType
@@ -20,7 +18,6 @@ import com.sarang.torang.compose.type.LocalRestaurantOverViewImageLoader
 import com.sarang.torang.compose.type.LocalRestaurantOverviewRestaurantInfo
 import com.sarang.torang.di.basefeed_di.CustomExpandableTextType
 import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
-import com.sarang.torang.di.dialogsbox_di.ProvideMainDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

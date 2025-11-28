@@ -1,6 +1,10 @@
 package com.sarang.torang.di.restaurant_overview_di
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.FeedItemClickEvents
@@ -16,6 +20,7 @@ fun customRestaurantFeedType(
     onShare      : (Int) -> Unit = { Log.w(tag, "onShare callback is not set") },
     onMenu       : (Int) -> Unit = { Log.w(tag, "onMenu callback is not set") },
 ): RestaurantFeedType = { feedData ->
+    var lastPage : Int by remember { mutableStateOf(0) }
     FeedItem(
         showLog = true,
         uiState = feedData.feed.toFeed.toReview(feedData.isLogin),
@@ -26,13 +31,15 @@ fun customRestaurantFeedType(
             onComment    = { onComment(feedData.feed.reviewId) },
             onShare      = { onShare(feedData.feed.reviewId) },
             onMenu       = { onMenu(feedData.feed.reviewId) },
-            onLikes      = {  },
-            onImage      = {  },
-            onName       = {  },
-            onProfile    = {  },
-            onRestaurant = {  }
+            onLikes      = { rootNavController.like(feedData.feed.reviewId) },
+            onImage      = { rootNavController.imagePager(feedData.feed.reviewId, lastPage) },
+            onName       = { rootNavController.profile(feedData.feed.userId) },
+            onProfile    = { rootNavController.profile(feedData.feed.userId) },
+            onRestaurant = { rootNavController.restaurant(feedData.feed.restaurantId) }
         ),
-        onPage = {}
+        onPage = {
+            lastPage = it.page
+        }
     )
 }
 

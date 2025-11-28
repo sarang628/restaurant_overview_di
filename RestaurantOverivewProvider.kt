@@ -23,16 +23,19 @@ import com.sarang.torang.di.basefeed_di.CustomFeedImageLoader
 @Composable
 fun ProvideRestaurantOverview(
     restaurantId    : Int,
-    onErrorMessage  : (String) -> Unit = {}
+    onErrorMessage  : (String) -> Unit = {},
+    rootNavController: RootNavController = RootNavController()
 ){
     val viewModel : RestaurantInfoViewModel = hiltViewModel()
     CompositionLocalProvider(
         LocalRestaurantOverViewImageLoader    provides restaurantOverViewImageLoader,
         LocalRestaurantOverviewRestaurantInfo provides restaurantOverViewRestaurantInfo(
-            rootNavController = RootNavController(),
+            rootNavController = rootNavController,
             viewModel = viewModel
         ),
-        LocalRestaurantFeed                   provides customRestaurantFeedType(),
+        LocalRestaurantFeed                   provides customRestaurantFeedType(
+            rootNavController = rootNavController
+        ),
         LocalExpandableTextType               provides CustomExpandableTextType,
         LocalFeedImageLoader                  provides CustomFeedImageLoader(),
         LocalPullToRefresh                    provides CustomRestaurantOverviewPullToRefreshType

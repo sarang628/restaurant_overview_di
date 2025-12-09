@@ -36,7 +36,7 @@ class RestaurantOverviewServiceModule {
         return object : FetchReviewsUseCase {
             override suspend fun invoke(restaurantId: Int): Flow<List<FeedInRestaurant>> {
                 try {
-                    feedRepository.findByRestaurantId(restaurantId)
+                    feedRepository.loadByRestaurantId(restaurantId)
                 } catch (e: HttpException) {
                     throw Exception(e.handle())
                 }
@@ -54,13 +54,13 @@ class RestaurantOverviewServiceModule {
         return FeedInRestaurant(
             restaurantId = this.review.restaurantId ?: 0,
             reviewId = this.review.reviewId,
-            userId = this.review.userId,
-            name = this.review.userName,
+            userId = this.review.userId ?: 0,
+            name = this.review.userName ?: "",
             restaurantName = this.review.restaurantName ?: "",
-            rating = this.review.rating,
+            rating = this.review.rating ?: 0f,
             profilePictureUrl = BuildConfig.PROFILE_IMAGE_SERVER_URL + this.review.profilePicUrl,
-            likeAmount = this.review.likeAmount,
-            commentAmount = this.review.commentAmount,
+            likeAmount = this.review.likeAmount ?: 0,
+            commentAmount = this.review.commentAmount ?: 0,
             author = "",
             author1 = "",
             author2 = "",
@@ -69,18 +69,18 @@ class RestaurantOverviewServiceModule {
             comment2 = "",
             isLike = this.like != null,
             isFavorite = this.favorite != null,
-            visibleLike = review.likeAmount > 0,
-            visibleComment = review.commentAmount > 0,
-            contents = this.review.contents,
-            createDate = this.review.createDate,
+            visibleLike = (review.likeAmount ?: 0) > 0,
+            visibleComment = (review.commentAmount ?: 0) > 0,
+            contents = this.review.contents ?: "",
+            createDate = this.review.createDate ?: "",
             reviewImages = this.images.map { it.reviewImage }
         )
     }
 
     val ReviewImageEntity.reviewImage : FeedImageInRestaurant get() =  FeedImageInRestaurant(
         url = BuildConfig.REVIEW_IMAGE_SERVER_URL + this.pictureUrl,
-        width = this.width,
-        height = this.height
+        width = this.width ?: 0,
+        height = this.height ?: 0
     )
 
     @Provides

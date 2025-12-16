@@ -14,6 +14,7 @@ import com.sarang.torang.api.handle
 import com.sarang.torang.core.database.model.feed.ReviewAndImageEntity
 import com.sarang.torang.core.database.model.image.ReviewImageEntity
 import com.sarang.torang.data.FeedImageInRestaurant
+import com.sarang.torang.data.ReviewAndImage
 import com.sarang.torang.data.ReviewImage
 import com.sarang.torang.repository.FeedRepository
 import com.sarang.torang.session.SessionService
@@ -41,7 +42,7 @@ class RestaurantOverviewServiceModule {
                     throw Exception(e.handle())
                 }
 
-                return feedRepository.restaurantFeedsFlow(restaurantId).map {
+                return feedRepository.findRestaurantFeedsFlow(restaurantId).map {
                     it.map {
                         it.toFeedInRestaurant()
                     }
@@ -50,7 +51,7 @@ class RestaurantOverviewServiceModule {
         }
     }
 
-    fun ReviewAndImageEntity.toFeedInRestaurant() : FeedInRestaurant {
+    fun ReviewAndImage.toFeedInRestaurant() : FeedInRestaurant {
         return FeedInRestaurant(
             restaurantId = this.review.restaurantId ?: 0,
             reviewId = this.review.reviewId,
@@ -77,7 +78,7 @@ class RestaurantOverviewServiceModule {
         )
     }
 
-    val ReviewImageEntity.reviewImage : FeedImageInRestaurant get() =  FeedImageInRestaurant(
+    val ReviewImage.reviewImage : FeedImageInRestaurant get() =  FeedImageInRestaurant(
         url = BuildConfig.REVIEW_IMAGE_SERVER_URL + this.pictureUrl,
         width = this.width ?: 0,
         height = this.height ?: 0

@@ -1,29 +1,24 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
 import com.sarang.torang.BuildConfig
+import com.sarang.torang.api.ApiRestaurant
+import com.sarang.torang.api.handle
+import com.sarang.torang.data.FeedImageInRestaurant
+import com.sarang.torang.data.FeedInRestaurant
+import com.sarang.torang.data.ReviewAndImage
+import com.sarang.torang.data.ReviewImage
+import com.sarang.torang.repository.feed.FeedFlowRepository
+import com.sarang.torang.repository.feed.FeedLoadRepository
 import com.sarang.torang.usecase.restaurantoverview.FetchReviewsUseCase
 import com.sarang.torang.usecase.restaurantoverview.GetMenuUseCase
 import com.sarang.torang.usecase.restaurantoverview.GetRestaurantGalleryUseCase
-import com.sarang.torang.api.ApiRestaurant
-import com.sarang.torang.api.ApiReview
-import com.sarang.torang.api.ApiReviewV1
-import com.sarang.torang.api.handle
-import com.sarang.torang.core.database.model.feed.ReviewAndImageEntity
-import com.sarang.torang.core.database.model.image.ReviewImageEntity
-import com.sarang.torang.data.FeedImageInRestaurant
-import com.sarang.torang.data.ReviewAndImage
-import com.sarang.torang.data.ReviewImage
-import com.sarang.torang.repository.FeedRepository
-import com.sarang.torang.session.SessionService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 
@@ -32,17 +27,18 @@ import retrofit2.HttpException
 class RestaurantOverviewServiceModule {
     @Provides
     fun providesFetchReviewsUseCase(
-        feedRepository  : FeedRepository
+        feedLoadRepository  : FeedLoadRepository,
+        feedFlowRepository  : FeedFlowRepository
     ): FetchReviewsUseCase {
         return object : FetchReviewsUseCase {
             override suspend fun invoke(restaurantId: Int): Flow<List<FeedInRestaurant>> {
                 try {
-                    feedRepository.loadByRestaurantId(restaurantId)
+                    feedLoadRepository.loadByRestaurantId(restaurantId)
                 } catch (e: HttpException) {
                     throw Exception(e.handle())
                 }
 
-                return feedRepository.findRestaurantFeedsFlow(restaurantId).map {
+                return feedFlowRepository.findRestaurantFeedsFlow(restaurantId).map {
                     it.map {
                         it.toFeedInRestaurant()
                     }

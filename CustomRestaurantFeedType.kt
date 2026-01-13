@@ -7,9 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
-import com.sarang.torang.compose.feed.FeedItemClickEvents
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
 import com.sarang.torang.data.FeedInRestaurant
+import com.sarang.torang.data.basefeed.FeedItemClickEvents
 import com.sarang.torang.data.feed.FeedImage
 import com.sarang.torang.di.feed_di.toReview
 
@@ -22,9 +22,8 @@ fun customRestaurantFeedType(
 ): RestaurantFeedType = { feedData ->
     var lastPage : Int by remember { mutableStateOf(0) }
     FeedItem(
-        showLog = true,
         uiState = feedData.feed.toFeed.toReview(feedData.isLogin),
-        pageScrollAble = feedData.pageScrollAble,
+        pageScroll = feedData.pageScrollAble,
         feedItemClickEvents = FeedItemClickEvents(
             onLike       = { feedData.onLike(feedData.feed.reviewId) },
             onFavorite   = { feedData.onFavorite(feedData.feed.reviewId) },

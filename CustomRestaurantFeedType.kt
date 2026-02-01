@@ -7,10 +7,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.sarang.torang.RootNavController
 import com.sarang.torang.compose.feed.FeedItem
+import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
 import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.data.basefeed.FeedItemClickEvents
 import com.sarang.torang.data.feed.FeedImage
+import com.sarang.torang.di.feed_di.provideFeed
 import com.sarang.torang.di.feed_di.toReview
 
 private val tag = "__CustomRestaurantFeedType"
@@ -20,26 +22,16 @@ fun customRestaurantFeedType(
     onShare      : (Int) -> Unit = { Log.w(tag, "onShare callback is not set") },
     onMenu       : (Int) -> Unit = { Log.w(tag, "onMenu callback is not set") },
 ): RestaurantFeedType = { feedData ->
-    var lastPage : Int by remember { mutableStateOf(0) }
-    FeedItem(
-        uiState = feedData.feed.toFeed.toReview(feedData.isLogin),
-        pageScroll = feedData.pageScrollAble,
-        feedItemClickEvents = FeedItemClickEvents(
-            onLike       = { feedData.onLike(feedData.feed.reviewId) },
-            onFavorite   = { feedData.onFavorite(feedData.feed.reviewId) },
-            onComment    = { onComment(feedData.feed.reviewId) },
-            onShare      = { onShare(feedData.feed.reviewId) },
-            onMenu       = { onMenu(feedData.feed.reviewId) },
-            onLikes      = { rootNavController.like(feedData.feed.reviewId) },
-            onImage      = { rootNavController.imagePager(feedData.feed.reviewId, lastPage) },
-            onName       = { rootNavController.profile(feedData.feed.userId) },
-            onProfile    = { rootNavController.profile(feedData.feed.userId) },
-            onRestaurant = { rootNavController.restaurant(feedData.feed.restaurantId) }
-        ),
-        onPage = {
-            lastPage = it.page
-        }
-    )
+    provideFeed(
+        rootNavController = rootNavController,
+        onComment = onComment,
+        onShare = onShare,
+        onMenu = onMenu
+    ).invoke(FeedTypeData(
+        feed = feedData.feed.toFeed,
+        isLogin = feedData.isLogin,
+        pageScrollable = feedData.pageScrollAble
+    ))
 }
 
 val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {

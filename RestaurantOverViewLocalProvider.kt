@@ -41,14 +41,14 @@ fun restaurantOverViewRestaurantInfo(rootNavController: RootNavController, viewM
     }
 }
 
-val restaurantInfoImageLoader: RestaurantInfoImageLoader = { modifier, url, progressSize, errorIconSize, contentScale ->
+val restaurantInfoImageLoader: RestaurantInfoImageLoader = {
     provideTorangAsyncImage().invoke(
         TorangAsyncImageData(
-            modifier = modifier,
-            model = url,
-            progressSize = progressSize ?: 30.dp,
-            errorIconSize = errorIconSize ?: 30.dp,
-            contentScale = contentScale ?: ContentScale.None
+            modifier        = it.modifier,
+            model           = it.url,
+            progressSize    = it.progressSize ?: 30.dp,
+            errorIconSize   = it.errorIconSize ?: 30.dp,
+            contentScale    = it.contentScale ?: ContentScale.None
         )
     )
 }

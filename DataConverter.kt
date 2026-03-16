@@ -1,12 +1,11 @@
 package com.sarang.torang.di.restaurant_overview_di
 
-import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.library.data.MenuData
 import com.sarang.library.data.RestaurantImage
 import com.sarang.library.data.ReviewRowData
-import com.sarang.library.data.ReviewSummaryData
 import com.sarang.torang.BuildConfig
 import com.sarang.torang.data.FeedImageInRestaurant
+import com.sarang.torang.data.FeedInRestaurant
 import com.sarang.torang.data.remote.response.FeedApiModel
 import com.sarang.torang.data.remote.response.RestaurantDetailApiModel
 
@@ -27,18 +26,6 @@ fun RestaurantDetailApiModel.toRestaurantImages(): List<RestaurantImage> {
             url = BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url
         )
     }
-}
-
-fun RestaurantDetailApiModel.toReviewSummaryData(): ReviewSummaryData {
-    return ReviewSummaryData(
-        rating = this.restaurant.rating ?: 0f,
-        totalReviewer = this.restaurant.reviewCount?: 0,
-        score5 = 5.0f,
-        score4 = 4.0f,
-        score3 = 3.0f,
-        score2 = 2.0f,
-        score1 = 1.0f
-    )
 }
 
 fun RestaurantDetailApiModel.toReviewRowData(): List<ReviewRowData> {

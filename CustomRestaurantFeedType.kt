@@ -1,19 +1,12 @@
 package com.sarang.torang.di.restaurant_overview_di
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.sarang.torang.RootNavController
-import com.sarang.torang.compose.feed.FeedItem
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
 import com.sarang.torang.data.FeedInRestaurant
-import com.sarang.torang.data.basefeed.FeedItemClickEvents
 import com.sarang.torang.data.feed.FeedImage
 import com.sarang.torang.di.feed_di.provideFeed
-import com.sarang.torang.di.feed_di.toReview
 
 private val tag = "__CustomRestaurantFeedType"
 fun customRestaurantFeedType(

@@ -2,10 +2,11 @@ package com.sarang.torang.di.restaurant_overview_di
 
 import android.util.Log
 import com.sarang.torang.RootNavController
+import com.sarang.torang.compose.feed.data.Feed
+import com.sarang.torang.compose.feed.data.FeedImage
 import com.sarang.torang.compose.feed.type.FeedTypeData
 import com.sarang.torang.compose.restaurantdetail.feed.RestaurantFeedType
 import com.sarang.torang.data.FeedInRestaurant
-import com.sarang.torang.data.feed.FeedImage
 import com.sarang.torang.di.feed_di.provideFeed
 
 private val tag = "__CustomRestaurantFeedType"
@@ -27,8 +28,8 @@ fun customRestaurantFeedType(
     ))
 }
 
-val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {
-    return com.sarang.torang.data.feed.Feed(
+val FeedInRestaurant.toFeed : Feed get() {
+    return Feed(
         reviewId = this.reviewId,
         restaurantId = this.restaurantId,
         userId = this.userId,
@@ -43,9 +44,10 @@ val FeedInRestaurant.toFeed : com.sarang.torang.data.feed.Feed get() {
         contents = this.contents,
         createDate =  this.createDate,
         reviewImages = this.reviewImages.map { FeedImage(
-            url = it.url,
-            width = it.width,
-            height = it.height)
+                url = it.url,
+                width = it.width,
+                height = it.height
+            )
         }
     )
 }

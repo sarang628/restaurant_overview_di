@@ -44,6 +44,7 @@ val FeedInRestaurant.toFeed : Feed get() {
         contents = this.contents,
         createDate =  this.createDate,
         reviewImages = this.reviewImages.map { FeedImage(
+                id = 0,
                 url = it.url,
                 width = it.width,
                 height = it.height

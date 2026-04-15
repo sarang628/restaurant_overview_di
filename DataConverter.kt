@@ -62,7 +62,18 @@ fun FeedApiModel.toFeedInRestaurant(): FeedInRestaurant {
         visibleLike = false,
         visibleComment = false,
         contents = this.contents,
-        reviewImages = this.pictures.map { FeedImageInRestaurant(BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url, it.width, it.height) },
+        reviewImages = this.pictures.mapNotNull {
+            val width = it.width
+            val height = it.height
+            if(width != null  && height != null) {
+                FeedImageInRestaurant(
+                    BuildConfig.REVIEW_IMAGE_SERVER_URL + it.picture_url,
+                    width,
+                    height
+                )
+            }
+            else null
+                                                },
         restaurantId = this.restaurant.restaurantId ?: -1,
         createDate = this.create_date
     )
